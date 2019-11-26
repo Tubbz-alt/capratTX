@@ -1,13 +1,17 @@
 Package: ECRAT
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Ercot Climate Risk Analysis Tool
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Sean Turner <sean.turner@pnnl.gov>
+Maintainer: Sean Turner <sean.turner@pnnl.gov>
+Description: The goal of ECRAT is to simulate water reservoir storages providing cooling water for thermal power plants of ERCOT.
+    The package includes functions for reservoir model fitting, simulation, and post-processing.
+License: BSD 2-Clause
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/swd-turner/ECRAT
 BugReports: https://github.com/swd-turner/ECRAT/issues
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
+Imports: 
+    magrittr
