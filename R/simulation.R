@@ -1,19 +1,23 @@
 # simulation
 
-simulate_reservoir <- function(s_cap, s, i, r, params, mth){
+simulate_reservoir <- function(s_cap, s, i, params){
 
-  r_ <- params[1]#tibble(month = 1:12, r = params[1:12])
-  hedge_factor <- params[2]#tibble(month = 1:12, h = params[13:24])
+
+  I <- i[!is.na(i)]
+  S <- vector("numeric", length = length(I) + 1)
+  S[1] <- s[1]
+  R <- vector("numeric", length = length(I))
+
+
+  r_ <- params[1] * mean(I)
+  hedge_factor <- params[2]
 
   # 0 means hedge is target
   # 1 means hedge is s_cap
 
   ((s_cap - r_) * hedge_factor) + r_ -> hedge_level
 
-  I <- i[!is.na(i)]
-  S <- vector("numeric", length = length(I) + 1)
-  S[1] <- s[1]
-  R <- vector("numeric", length = length(I))
+
 
   for (t in 1:length(I)){
 

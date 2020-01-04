@@ -4,7 +4,8 @@
 \alias{calibrate_reservoir_model}
 \title{calibrate_reservoir_model}
 \usage{
-calibrate_reservoir_model(reservoir_name, res_filepath, plot = FALSE)
+calibrate_reservoir_model(reservoir_name, res_filepath, plot = FALSE,
+  s_cap_def = "reported", output = "parameters")
 }
 \arguments{
 \item{reservoir_name}{name of reservoir to be calibrated}
@@ -12,6 +13,8 @@ calibrate_reservoir_model(reservoir_name, res_filepath, plot = FALSE)
 \item{res_filepath}{full path to reservoir data file for ERCOT}
 
 \item{plot}{T/F plot storage time series?}
+
+\item{output}{return either optimized parameters ("parameters") or simulation results ("results")}
 }
 \description{
 calibrate_reservoir_model

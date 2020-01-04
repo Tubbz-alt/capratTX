@@ -4,10 +4,12 @@
 \alias{calibrate_all_reservoirs}
 \title{calibrate_all_reservoirs}
 \usage{
-calibrate_all_reservoirs(res_filepath)
+calibrate_all_reservoirs(res_filepath, output = "parameters")
 }
 \arguments{
 \item{res_filepath}{full path to reservoir data file for ERCOT}
+
+\item{output}{return either optimized parameters ("parameters") or simulation results ("results")}
 }
 \description{
 calibrate_all_reservoirs
