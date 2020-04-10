@@ -42,24 +42,15 @@ read_ERCOT_data <- function(res_filepath) {
 #'
 read_controlflows <- function(reservoir){
 
-  list.files(
-    paste0(system.file("extdata/", package = "ECRAT"), "/Control"),
-    full = T
-  ) %>% .[grepl("runoff_mcm_", .)] -> control_files
-
-  vroom_silent <- function(x) vroom(x, col_types = cols())
-
   # replace space with _ for reservoir column names
   gsub(" ", "_", reservoir) -> reservoir_
   if(reservoir_ == "STP"){
     reservoir_ <- "South_Texas_Project_Reservoir"
   }
 
-  control_files %>%
-    map_dfr(vroom_silent) %>%
-    select(date, one_of(reservoir_)) -> controlflows
-
-  names(controlflows) <- c("date", "flow")
+  vroom_silent(paste0(system.file("extdata/", package = "ECRAT"),
+                      "/Control/", reservoir_, ".csv")) %>%
+    select(-reservoir) -> controlflows
 
   return(controlflows)
 
@@ -85,9 +76,6 @@ read_gcm_flows <- function(reservoir, gcm, period){
     .[grepl(gcm, .)] %>%
     .[grepl(period, .)] -> gcm_file_dir
 
-  list.files(gcm_file_dir, full = T) -> gcm_files
-
-  vroom_silent <- function(x) vroom(x, col_types = cols())
 
   # replace space with _ for reservoir column names
   gsub(" ", "_", reservoir) -> reservoir_
@@ -95,11 +83,8 @@ read_gcm_flows <- function(reservoir, gcm, period){
     reservoir_ <- "South_Texas_Project_Reservoir"
   }
 
-  gcm_files %>%
-    map_dfr(vroom_silent) %>%
-    select(date, one_of(reservoir_)) -> gcm_flows
-
-  names(gcm_flows) <- c("date", "flow")
+  vroom_silent(paste0(gcm_file_dir, "/", reservoir_, ".csv")) %>%
+    select(date, flow) -> gcm_flows
 
   return(gcm_flows)
 
@@ -110,3 +95,7 @@ read_gcm_flows <- function(reservoir, gcm, period){
 box_cox_transform <- function(x, lamda){
   ((1 + x) ^ lamda - 1) / lamda
 }
+
+
+vroom_silent <- function(x) vroom(x, col_types = cols())
+
