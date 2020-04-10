@@ -11,7 +11,8 @@ read_ERCOT_data <- function(res_filepath) {
     generator_info
 
   # 2. Reservoirs info
-  read_xlsx(res_filepath, sheet = "Reservoirs Info") ->
+  read_xlsx(res_filepath, sheet = "Reservoirs Info",
+            na = c("N/A", "#N/A")) ->
     reservoir_info
 
   # 3. Storage records
