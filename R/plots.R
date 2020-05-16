@@ -9,27 +9,27 @@ plot_watershed <- function(reservoir) {
 
 #' plot_texas_watershed
 #' @details plot ERCOT reservoir points by Summer Capacity and Storage Level
-#' @param reservoir local data directory
+#' @param drawdown_scenario tibble with reservoir name and storage
 #' @import ggplot2
 #' @importFrom vroom vroom
-#' @importFrom viridus scale_color_viridis
+#' @importFrom viridis scale_color_viridis
 #' @importFrom dplyr mutate rename
 #' @importFrom sf st_read st_intersection
 #' @importFrom tmaptools set_projection
-#' @importFrom sp SpatialPointsDataFrame
+#' @importFrom sp SpatialPointsDataFrame CRS
 #' @export
 
-plot_texas_reservoirs <- function(data_dir){
+plot_texas_reservoirs <- function(drawdown_scenario){
 
-  # Load in ERCOT reservoir data
-  vroom(paste0(data_dir,"/inst/extdata/ercot_reservoirs_lat_lon.csv")) -> reservoirs
+  system.file("extdata", package = "ECRAT") -> sys_dir
 
-  # Insert code for storage level data below
-  #left_join(reservoirs, storage_levels, by = res_name) -> res_table
+  vroom_silent(paste0(sys_dir,
+               "/ercot_reservoirs_lat_lon.csv")) -> reservoirs
 
   # Temporary random storage levels
   reservoirs %>%
-    mutate(storage = sample(0:100, 44)) -> res_table
+    left_join(drawdown_scenario, by = "res_name") %>%
+    filter(!is.na(storage)) -> res_table
 
   # Get lat/long and data for spatial points
   res_table[,c(3,4)] -> latlon
@@ -40,11 +40,11 @@ plot_texas_reservoirs <- function(data_dir){
     rename(`Summer Capacity MW` = Summer.Capacity..MW..at.Reservoir) -> pointsdata
 
   # Load in texas shape
-  st_read(paste0(data_dir,"/inst/extdata/Texas_Files/Texas_Shape.shp")) %>%
+  st_read(paste0(sys_dir,"/Texas_Files/Texas_Shape.shp"), quiet = TRUE) %>%
     set_projection(projection = "+proj=longlat +datum=WGS84 +no_defs") -> texas
 
   # Load in Texas HUC4 shape
-  st_read(paste0(data_dir, "/inst/extdata/Texas_Files/Texas_HUC4.shp")) %>%
+  st_read(paste0(sys_dir, "/Texas_Files/Texas_HUC4.shp"), quiet = TRUE) %>%
     set_projection(projection = "+proj=longlat +datum=WGS84 +no_defs")-> huc4
 
   # Intersect to only get parts of HUC4 within Texas
@@ -52,25 +52,20 @@ plot_texas_reservoirs <- function(data_dir){
 
   # Plot Texas Summer Capacity and Storage with HUC4
   ggplot(texas) +
-    geom_sf() +
-    geom_sf(data = select_huc, fill = "grey86", colour = "grey30") +
-    geom_point(data = pointsdata, alpha = 0.8,aes(x = lon, y = lat, size = `Summer Capacity MW`, col = storage)) +
+    geom_sf(color = "black") +
+    geom_sf(data = select_huc, fill = "grey98", colour = "grey30") +
+    geom_point(data = pointsdata,
+               alpha = 1,
+               aes(x = lon, y = lat, size = `Summer Capacity MW`, col = storage)) +
     scale_color_viridis(name = "Storage %",
                         breaks=c(0,25,50,75,100),
-                        limits=c(0,100)) +
+                        limits=c(0,100), direction = -1, option = "E") +
     geom_point(data = pointsdata, shape = 21, aes(x = lon, y = lat, size = `Summer Capacity MW`)) +
-    scale_size_continuous(name = "Summer Capacity MW",
-                          breaks = c(1000, 3000, 5000, 6000),
-                          range = c(0.01,9)) +
-    theme(line = element_blank(),
-          axis.text.x = element_blank(),
-          axis.text.y = element_blank(),
-          axis.title.x = element_blank(),
-          axis.title.y = element_blank(),
-          panel.background = element_blank(),
-          plot.title = element_text(hjust = 0.5)) +
-    ggtitle("ERCOT Reservoir Summer Capacity and Storage")
-
+    scale_size_continuous(name = "Capacity MW",
+                          breaks = c(1000, 5000),
+                          range = c(0.1, 15)) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    theme_void()
 }
 
 
