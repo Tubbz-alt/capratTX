@@ -1,45 +1,45 @@
-res_name,res_longname,lat,lon
-Amistad,Amistad,29.44972,-101.05583
-Arlington,"Arlington, Lake",32.71624374,-97.19251251
-Arrowhead,"Arrowhead, Lake",33.76426697,-98.37171936
-Bardwell,Bardwell Lake,32.25014877,-96.64720917
-Belton,Belton,31.10628891,-97.47473145
-Bridgeport,"Bridgeport, Lake",33.22289276,-97.83197784
-Buchanan,"Lyndon B Johnson, Lake",30.75156975,-98.41836548
-Canyon,Canyon Lake,29.86882973,-98.19889832
-Colorado City,"Colorado City, Lake",32.344841,-100.919838
-Falcon,"Falcon Reservoir, International",26.55722,-99.16056
-Graham,"Graham, Lake",33.13455963,-98.61367035
-Granbury,"Granbury, Lake",32.37430573,-97.68919373
-Houston,"Houston, Lake",29.91633224,-95.14131927
-Joe Pool,Joe Pool,32.64346695,-97.00111389
-Kemp,"Diversion, Lake",33.75842667,-99.15118408
-Lavon,Lavon Lake,33.03178787,-96.48249054
-Limestone,"Limestone, Lake",31.32517815,-96.31913757
-Livingston,"Livingston, Lake",30.63353157,-95.01021576
-Mountain Creek,Mountain Creek Lake,32.73207474,-96.94333649
-Palo Pinto,"Palo Pinto, Lake",32.64762878,-98.26921082
-Pat Mayse,Pat Mayse Lake,33.85288239,-95.54467773
-Ray Hubbard,"Ray Hubbard, Lake",32.80012894,-96.49610138
-Ray Roberts,"Ray Roberts, Lake",33.35539246,-97.05001068
-Richland-Chambers,Richland Chambers Reservoir,32.04043579,-96.20664215
-Striker,"Striker, Lake",31.9340833,-94.97565555
-Texana,"Texana, Lake",28.89193153,-96.57775116
-Texoma,Texoma,33.81805556,-96.57222222
-Toledo Bend,Toledo Bend Reservoir,31.1962986,-93.57212067
-Whitney,"Whitney, Lake",31.86543655,-97.37195587
-Squaw Creek Reservoir,Squaw Creek Reservoir,32.30014038,-97.78697205
-Coleto Creek,Coleto Creek Reservoir,28.7311039,-97.16499329
-Martin,Martin Lake,32.26182556,-94.57325745
-Travis,"Travis, Lake",30.39186859,-97.90723419
-Waco,Waco,31.57960892,-97.19778442
-Bryan Utilities,Bryan Utilities Lake,30.72536,-96.45674
-Eufaula,"Eufaula, Lake",34.74293,-95.8776
-Greenville,Greenville City Lake,33.17008,-96.12523
-STP,South Texas Project Reservoir,28.795556,-96.048889
-Trinidad,Trinidad Lake,32.126,-96.101
-Victor Braunig,Victor Braunig Lake,29.2641,-98.38446
-Walter E Long,"Walter E Long, Lake",30.30493,-97.61911
-Calaveras,Calaveras Lake,29.279444,-98.303889
-Smithers,Smithers Lake,29.48,-95.63
-Twin Oak,Twin Oak Reservoir,31.183869,-96.489207
+res_name,res_longname,lat,lon,Summer Capacity (MW) at Reservoir
+Amistad,Amistad,29.44972,-101.05583,262.8
+Arlington,"Arlington, Lake",32.71624374,-97.19251251,1265
+Arrowhead,"Arrowhead, Lake",33.76426697,-98.37171936,77
+Bardwell,Bardwell Lake,32.25014877,-96.64720917,312
+Belton,Belton,31.10628891,-97.47473145,1419.1
+Bridgeport,"Bridgeport, Lake",33.22289276,-97.83197784,1855
+Buchanan,"Lyndon B Johnson, Lake",30.75156975,-98.41836548,671.8
+Canyon,Canyon Lake,29.86882973,-98.19889832,2394.9999999999995
+Colorado City,"Colorado City, Lake",32.344841,-100.919838,407
+Falcon,"Falcon Reservoir, International",26.55722,-99.16056,1268.2
+Graham,"Graham, Lake",33.13455963,-98.61367035,624
+Granbury,"Granbury, Lake",32.37430573,-97.68919373,2047
+Houston,"Houston, Lake",29.91633224,-95.14131927,7188.2
+Joe Pool,Joe Pool,32.64346695,-97.00111389,1444
+Kemp,"Diversion, Lake",33.75842667,-99.15118408,650
+Lavon,Lavon Lake,33.03178787,-96.48249054,2228
+Limestone,"Limestone, Lake",31.32517815,-96.31913757,2159
+Livingston,"Livingston, Lake",30.63353157,-95.01021576,3040
+Mountain Creek,Mountain Creek Lake,32.73207474,-96.94333649,808
+Palo Pinto,"Palo Pinto, Lake",32.64762878,-98.26921082,611
+Pat Mayse,Pat Mayse Lake,33.85288239,-95.54467773,1279
+Ray Hubbard,"Ray Hubbard, Lake",32.80012894,-96.49610138,915
+Ray Roberts,"Ray Roberts, Lake",33.35539246,-97.05001068,122
+Richland-Chambers,Richland Chambers Reservoir,32.04043579,-96.20664215,957.3
+Striker,"Striker, Lake",31.9340833,-94.97565555,774
+Texana,"Texana, Lake",28.89193153,-96.57775116,1734.1999999999998
+Texoma,Texoma,33.81805556,-96.57222222,797
+Toledo Bend,Toledo Bend Reservoir,31.1962986,-93.57212067,846
+Whitney,"Whitney, Lake",31.86543655,-97.37195587,3408.6000000000004
+Squaw Creek Reservoir,Squaw Creek Reservoir,32.30014038,-97.78697205,2400
+Coleto Creek,Coleto Creek Reservoir,28.7311039,-97.16499329,660
+Martin,Martin Lake,32.26182556,-94.57325745,2410
+Travis,"Travis, Lake",30.39186859,-97.90723419,4782
+Waco,Waco,31.57960892,-97.19778442,970
+Bryan Utilities,Bryan Utilities Lake,30.72536,-96.45674,199
+Eufaula,"Eufaula, Lake",34.74293,-95.8776,1246
+Greenville,Greenville City Lake,33.17008,-96.12523,87
+STP,South Texas Project Reservoir,28.795556,-96.048889,2581
+Trinidad,Trinidad Lake,32.126,-96.101,235
+Victor Braunig,Victor Braunig Lake,29.2641,-98.38446,1511
+Walter E Long,"Walter E Long, Lake",30.30493,-97.61911,927
+Calaveras,Calaveras Lake,29.279444,-98.303889,3005
+Smithers,Smithers Lake,29.48,-95.63,4313
+Twin Oak,Twin Oak Reservoir,31.183869,-96.489207,1665
