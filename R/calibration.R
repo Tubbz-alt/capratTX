@@ -34,13 +34,49 @@ calibrate_all_reservoirs <- function(res_filepath,
   return(results_all)
 }
 
+#' validate_all_reservoirs
+#' @details perform k-fold validation on all reservoir models
+#' @param res_filepath full path to reservoir data file for ERCOT
+#' @importFrom purrr map_dfr
+#' @importFrom dplyr mutate
+#' @export
+#'
+validate_all_reservoirs <- function(res_filepath){
+
+  read_ERCOT_data(res_filepath)[["storage_levels"]] %>%
+    .[["Look Up Name for Reservoir"]] %>%
+    unique() -> reservoir_shortnames
+
+  reservoir_shortnames %>%
+    .[!grepl("Amistad", .)] %>%
+    .[!grepl("STP", .)] %>%
+    .[!grepl("Falcon", .)] %>%
+    map(function(x){
+      message(x)
+      calibrate_reservoir_model(x,
+                                res_filepath = res_filepath,
+                                plot = FALSE,
+                                validation_mode = TRUE) -> trmse_scores
+
+      list(trmse_scores) -> trmse_scores_list
+      names(trmse_scores_list) <- x
+      return(trmse_scores_list)
+
+    }) -> results_all
+
+  return(results_all)
+}
+
+
 #' calibrate_reservoir_model
 #' @details Performs calibration of reservoir model using monthly demand factors
 #' @param reservoir_name name of reservoir to be calibrated
 #' @param res_filepath full path to reservoir data file for ERCOT
 #' @param plot T/F plot storage time series?
 #' @param output return either optimized parameters ("parameters") or simulation results ("results")
+#' @param validation_mode logical. Set to TRUE to perform k-fold validation on model and report RMSE scores across validation groups.
 #' @importFrom lubridate as_date month year
+#' @importFrom purrr map
 #' @importFrom tidyr gather
 #' @importFrom nloptr nloptr
 #' @import dplyr
@@ -51,7 +87,8 @@ calibrate_reservoir_model <- function(reservoir_name,
                                       res_filepath,
                                       plot = FALSE,
                                       s_cap_def = "reported",
-                                      output = "parameters"){
+                                      output = "parameters",
+                                      validation_mode = FALSE){
 
   stopifnot(output == "results" | output == "parameters")
 
@@ -77,20 +114,6 @@ calibrate_reservoir_model <- function(reservoir_name,
                             monthly_starting_storage[["start_storage_mcm"]])
   }
 
-  # deprecated (water consumption to guide release)
-  # read_ERCOT_data(res_filepath)[["generator_info"]] %>%
-  #   filter(`Look Up Name for Reservoir` == reservoir_name) %>%
-  #   select(`2014` = `2014 MWh Produced`,
-  #          `2015` = `2015 MWh Produced`,
-  #          `2016` = `2016 MWh Produced`,
-  #          `2017` = `2017 MWh Produced`,
-  #          `2018` = `2018 MWh Produced`,
-  #          consumption_galperMwh = `Consumed Gallons/MWh Est. (based on technology using NREL data)`) %>%
-  #   mutate(MWh_av = `2014` + `2015` + `2016` + `2017` + `2018`,
-  #          cons_total_gal = MWh_av * consumption_galperMwh,
-  #          cons_mcm_annual = cons_total_gal * US_gallon_to_mcm) %>%
-  #   .[["cons_mcm_annual"]] %>% sum() %>% .[]/12 -> monthly_water_demand_for_cooling
-
   flows %>%
     mutate(year = year(date), month = month(date)) %>%
     group_by(year, month) %>%
@@ -102,8 +125,12 @@ calibrate_reservoir_model <- function(reservoir_name,
     # tidyr::gather(metric, vol, -period) %>%
     # ggplot(aes(period, vol, group = metric, col = metric)) + geom_line()
 
+  # get yr col for k-fold cross validation
+  calibration_data[["year"]] -> yr_col_all
+  yr_col_all[which(!is.na(calibration_data[["cumulative_inflow_mcm"]]))] -> yr_col
+
   # set up function for optimizing model parameters
-  optimize_monthly_adjustments <- function(x){
+  optimize_monthly_adjustments <- function(x, leave_out_yr){
     simulate_reservoir(
       s_cap = storage_capacity,
       s = calibration_data[["start_storage_mcm"]],
@@ -116,9 +143,12 @@ calibrate_reservoir_model <- function(reservoir_name,
                                    s_obs)) ->
       sim_results
 
+    training_index <- which(yr_col != leave_out_yr)
+
     # get storage TRMSE for minimization
     (box_cox_transform(sim_results[["s_sim"]], 0.2) -
         box_cox_transform(sim_results[["s_obs_cnstr"]], 0.2)) ^ 2 %>%
+      .[training_index] %>%
       mean() %>% sqrt()
   }
 
@@ -128,14 +158,77 @@ calibrate_reservoir_model <- function(reservoir_name,
          ub = c(rep(10, 1), rep(1.2, 1)),
          opts = list("algorithm" = "NLOPT_LN_COBYLA",
                      "xtol_rel" = 1e-5,
-                     "maxeval" = 10000)) %>%
-    .$solution -> optimized_parameters
+                     "maxeval" = 10000),
+         leave_out_yr = 2100) ->
+    # ^^ 2100 is arbitrary yr not included in data, avoiding validation
+    nloptr_output
 
-  if (output == "parameters") return(optimized_parameters)
+  nloptr_output$solution -> optimized_parameters
+
+  if (output == "parameters" & validation_mode == FALSE) return(optimized_parameters)
 
   message("Optimized parameters: ",
           round(optimized_parameters[1], 3), " ",
           round(optimized_parameters[2], 3))
+
+  message("Objective result = ", nloptr_output$objective)
+
+
+  c(yr_col) %>% unique() %>% .[-1] %>%
+    map(function(loy){
+
+      nloptr(x0 = c(rep(0.5, 1), rep(0.5, 1)),
+             eval_f = optimize_monthly_adjustments,
+             lb = c(rep(0, 1), rep(0, 1)),
+             ub = c(rep(10, 1), rep(1.2, 1)),
+             opts = list("algorithm" = "NLOPT_LN_COBYLA",
+                         "xtol_rel" = 1e-5,
+                         "maxeval" = 10000),
+             leave_out_yr = loy)$solution -> train_params
+
+      simulate_reservoir(
+        s_cap = storage_capacity,
+        s = calibration_data[["start_storage_mcm"]],
+        i = calibration_data[["cumulative_inflow_mcm"]],
+        params = train_params
+      ) %>%
+        # constrain the s_obs to max storage
+        mutate(s_obs_cnstr = if_else(s_obs > storage_capacity,
+                                     storage_capacity,
+                                     s_obs),
+               year = yr_col) %>%
+        filter(year == loy) ->
+        sim_results_loy
+
+      simulate_reservoir(
+        s_cap = storage_capacity,
+        s = calibration_data[["start_storage_mcm"]],
+        i = calibration_data[["cumulative_inflow_mcm"]],
+        params = optimized_parameters
+      ) %>%
+        # constrain the s_obs to max storage
+        mutate(s_obs_cnstr = if_else(s_obs > storage_capacity,
+                                     storage_capacity,
+                                     s_obs),
+               year = yr_col) %>%
+        filter(year == loy) ->
+        sim_results
+
+      (box_cox_transform(sim_results[["s_sim"]], 0.2) -
+          box_cox_transform(sim_results[["s_obs_cnstr"]], 0.2)) ^ 2 %>%
+        mean() %>% sqrt() -> sim_result
+
+      (box_cox_transform(sim_results_loy[["s_sim"]], 0.2) -
+          box_cox_transform(sim_results_loy[["s_obs_cnstr"]], 0.2)) ^ 2 %>%
+        mean() %>% sqrt() -> sim_result_loy
+
+      # impact of leave year out on test year performance result
+      100* ((sim_result_loy - sim_result) / sim_result)
+
+    }) %>% unlist() -> k_fold_results
+
+  if(validation_mode == TRUE) return(k_fold_results)
+
 
   simulate_reservoir(
     s_cap = storage_capacity,
@@ -168,3 +261,4 @@ calibrate_reservoir_model <- function(reservoir_name,
           subtitle = reservoir_name)
 
 }
+

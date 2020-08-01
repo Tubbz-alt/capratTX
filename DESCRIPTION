@@ -12,6 +12,6 @@ LazyData: true
 URL: https://github.com/swd-turner/ECRAT
 BugReports: https://github.com/swd-turner/ECRAT/issues
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Imports: 
     magrittr

@@ -4,8 +4,13 @@
 \alias{simulate_gcm_inflows}
 \title{simulate_gcm_inflows}
 \usage{
-simulate_gcm_inflows(res_filepath, reservoir, period, parameters,
-  s_initial = 1)
+simulate_gcm_inflows(
+  res_filepath,
+  reservoir,
+  period,
+  parameters,
+  s_initial = 1
+)
 }
 \arguments{
 \item{res_filepath}{full path to reservoir data file for ERCOT}

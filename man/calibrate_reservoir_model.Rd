@@ -4,8 +4,14 @@
 \alias{calibrate_reservoir_model}
 \title{calibrate_reservoir_model}
 \usage{
-calibrate_reservoir_model(reservoir_name, res_filepath, plot = FALSE,
-  s_cap_def = "reported", output = "parameters")
+calibrate_reservoir_model(
+  reservoir_name,
+  res_filepath,
+  plot = FALSE,
+  s_cap_def = "reported",
+  output = "parameters",
+  validation_mode = FALSE
+)
 }
 \arguments{
 \item{reservoir_name}{name of reservoir to be calibrated}
@@ -15,6 +21,8 @@ calibrate_reservoir_model(reservoir_name, res_filepath, plot = FALSE,
 \item{plot}{T/F plot storage time series?}
 
 \item{output}{return either optimized parameters ("parameters") or simulation results ("results")}
+
+\item{validation_mode}{logical. Set to TRUE to perform k-fold validation on model and report RMSE scores across validation groups.}
 }
 \description{
 calibrate_reservoir_model
