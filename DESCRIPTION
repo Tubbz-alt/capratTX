@@ -1,16 +1,16 @@
-Package: ECRAT
+Package: capratTX
 Type: Package
-Title: Ercot Climate Risk Analysis Tool
+Title: Capacity at Risk Analysis Tool for Texas
 Version: 0.1.0
 Author: Sean Turner <sean.turner@pnnl.gov>
 Maintainer: Sean Turner <sean.turner@pnnl.gov>
-Description: The goal of ECRAT is to simulate water reservoir storages providing cooling water for thermal power plants of ERCOT.
+Description: The goal of capratTX is to simulate water reservoir storages providing cooling water for thermal power plants of ERCOT.
     The package includes functions for reservoir model fitting, simulation, and post-processing.
 License: BSD 2-Clause
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/swd-turner/ECRAT
-BugReports: https://github.com/swd-turner/ECRAT/issues
+URL: https://github.com/swd-turner/capratTX
+BugReports: https://github.com/swd-turner/capratTX/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Imports: 

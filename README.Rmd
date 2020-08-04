@@ -12,28 +12,18 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# ECRAT
+# capratTX
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of ECRAT is to simulate water storage reservoirs providing cooling water to thermal power plants in the ERCOT.
+The goal of capratTX is to simulate water storage reservoirs providing cooling water to thermal power plants in the ERCOT.
 
 ## Installation
 
-You can install the development version of ECRAT using `devtools`:
+You can install the development version of capratTX using `devtools`:
 
 ``` r
 library(devtools)
-install_github("swd-turner/ECRAT")
+install_github("pnnl/capratTX")
 ```
-
-## Example
-
-This is a basic example of use:
-
-```{r example}
-library(ECRAT)
-## example to follow
-```
-
