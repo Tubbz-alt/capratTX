@@ -12,7 +12,7 @@ simulate_gcm_inflows_all_dams <- function(res_filepath, period){
     .[["Look Up Name for Reservoir"]] %>%
     unique() -> reservoir_shortnames
 
-  vroom::vroom("../parameters.csv") -> params
+  vroom::vroom("../params.csv") -> params
 
   reservoir_shortnames %>%
     .[!grepl("Amistad", .)] %>%
@@ -89,3 +89,38 @@ simulate_gcm_inflows <- function(res_filepath, reservoir, period, parameters, s_
     })
 }
 
+#' generate_monthly_flow_replicates
+#' @details ...
+#' @param reservoir name of the reservoir
+#' @importFrom purrr map_dfr
+#' @import dplyr
+#' @importFrom lubridate year month
+#' @export
+#'
+generate_monthly_flow_replicates <- function(reservoir){
+
+  read_controlflows(reservoir) %>%
+    mutate(year = year(date), month = month(date)) %>%
+    group_by(year, month) %>%
+    summarise(obs_inflow = sum(flow)) %>% ungroup() %>%
+    arrange(year, month) -> monthy_inflow
+
+  monthy_inflow %>% .[["obs_inflow"]] %>%
+    ts(start = monthy_inflow[["year"]][1], frequency = 12) ->
+    monthly_inflow_ts
+
+  reservoir::dirtyreps(monthly_inflow_ts, n_reps) -> replicates
+
+  bind_cols(monthy_inflow, as_tibble(replicates)) %>%
+    mutate(date = as_date(paste(year, month, 1, sep = "-"))) %>%
+    select(-year, -month) %>%
+    gather(rep, flow, -date) ->
+    reps
+
+  reps %>% ggplot(aes(date, flow, col = rep)) +
+    geom_line(alpha = 0.5) +
+    scale_color_manual(values = c("blue", rep("grey", n_reps))) +
+    theme_void()
+
+    ymd("2001-01", truncated = 1)
+}
