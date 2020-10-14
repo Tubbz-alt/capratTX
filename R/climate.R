@@ -3,6 +3,7 @@
 #' @param res_filepath full path to reservoir data file for ERCOT
 #' @param period either "baseline" or "future"
 #' @importFrom purrr map_dfr
+#' @importFrom vroom vroom cols
 #' @importFrom dplyr mutate group_by summarise
 #' @importFrom lubridate year month
 #' @export
@@ -12,7 +13,7 @@ simulate_gcm_inflows_all_dams <- function(res_filepath, period){
     .[["Look Up Name for Reservoir"]] %>%
     unique() -> reservoir_shortnames
 
-  vroom::vroom("../params.csv") -> params
+  vroom("../params.csv", col_types = cols()) -> params
 
   reservoir_shortnames %>%
     .[!grepl("Amistad", .)] %>%
@@ -93,6 +94,7 @@ simulate_gcm_inflows <- function(res_filepath, reservoir, period, parameters, s_
 #' @details ...
 #' @param reservoir name of the reservoir
 #' @importFrom purrr map_dfr
+#' @importFrom reservoir dirtyreps
 #' @import dplyr
 #' @importFrom lubridate year month
 #' @export
@@ -109,7 +111,7 @@ generate_monthly_flow_replicates <- function(reservoir){
     ts(start = monthy_inflow[["year"]][1], frequency = 12) ->
     monthly_inflow_ts
 
-  reservoir::dirtyreps(monthly_inflow_ts, n_reps) -> replicates
+  dirtyreps(monthly_inflow_ts, n_reps) -> replicates
 
   bind_cols(monthy_inflow, as_tibble(replicates)) %>%
     mutate(date = as_date(paste(year, month, 1, sep = "-"))) %>%

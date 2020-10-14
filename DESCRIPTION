@@ -1,6 +1,6 @@
 Package: capratTX
 Type: Package
-Title: Capacity at Risk Analysis Tool for Texas
+Title: Thermoelectric capacity at Risk Analysis Tool for ERCOT
 Version: 0.1.0
 Author: Sean Turner <sean.turner@pnnl.gov>
 Maintainer: Sean Turner <sean.turner@pnnl.gov>
@@ -9,9 +9,21 @@ Description: The goal of capratTX is to simulate water reservoir storages provid
 License: BSD 2-Clause
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/swd-turner/capratTX
-BugReports: https://github.com/swd-turner/capratTX/issues
+URL: https://github.com/pnnl/capratTX
+BugReports: https://github.com/pnnl/capratTX/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Imports: 
-    magrittr
+    magrittr,
+    dplyr,
+    ggplot2,
+    lubridate,
+    nloptr,
+    purrr,
+    readxl,
+    sf,
+    sp,
+    tidyr,
+    tmaptools,
+    viridis,
+    vroom

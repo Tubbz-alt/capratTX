@@ -1,11 +1,11 @@
-horizon
+capratTX
 
-Copyright (c) 2019, Battelle Memorial Institute
+Copyright (c) 2020, Battelle Memorial Institute
 
 Open source under license BSD 2-Clause
 
 Open Source Disclaimer:
-This material was prepared as an account of work sponsored by an agency of the United States Government. 
+This material was prepared as an account of work sponsored by an agency of the United States Government.
 Neither the United States Government nor the United States Department of Energy, nor Battelle, nor any
 of their employees, nor any jurisdiction or organization that has cooperated in the development of these
 materials, makes any warranty, express or implied, or assumes any legal liability or responsibility for
@@ -28,7 +28,7 @@ under Contract DE-AC05-76RL01830
 
 
 GU Acknowledgement:
-These data were produced by BATTELLE under Contract No. DE‑AC05-76RL01830 with the U.S. Department of Energy (DOE). 
+These data were produced by BATTELLE under Contract No. DE‑AC05-76RL01830 with the U.S. Department of Energy (DOE).
 For a five-year period from October 31, 2014, the U.S. Government is granted for itself and others acting on
 its behalf a nonexclusive, paid-up, irrevocable worldwide license in this data to reproduce, prepare derivative
 works, and perform publicly and display publicly, by or on behalf of the U.S. Government.  There is provision
@@ -48,7 +48,7 @@ any responsibility or obligation for any claim, cost or damages arising out of o
 or the subject matter licensed.
 LICENSEE recognizes that the Licensed Software is provided by BATTELLE on an as-is basis.  Nothing in this
 Agreement shall be deemed to be a representation or warranty by BATTELLE, or the U.S. Government, of the
-accuracy, safety or usefulness for any purpose, of the Licensed Software at any time made available by BATTELLE. 
+accuracy, safety or usefulness for any purpose, of the Licensed Software at any time made available by BATTELLE.
 Neither the U.S. Government nor BATTELLE nor any affiliated company of BATTELLE shall have any liability
 whatsoever to LICENSEE or any other person for or on account of any injury, loss, or damage, of any kind or
 nature sustained by, or any damage assessed or asserted against, or any other liability incurred by or imposed
