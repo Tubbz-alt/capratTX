@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.com/pnnl/capratTX.svg?branch=master)](https://travis-ci.com/pnnl/capratTX)
 <!-- badges: end -->
 
 The goal of capratTX is to simulate water storage reservoirs providing
