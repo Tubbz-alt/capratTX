@@ -9,14 +9,21 @@
 status](https://travis-ci.com/pnnl/capratTX.svg?branch=master)](https://travis-ci.com/pnnl/capratTX)
 <!-- badges: end -->
 
-The goal of capratTX is to simulate water storage reservoirs providing
+The goal of `capratTX` is to simulate water storage reservoirs providing
 cooling water to thermal power plants in the ERCOT.
 
 ## Installation
 
-You can install the development version of capratTX using `devtools`:
+You can install the development version of `capratTX` using `devtools`:
 
 ``` r
 library(devtools)
 install_github("pnnl/capratTX")
 ```
+
+## Contact
+
+  - Please use [issues](https://github.com/pnnl/capratTX/issues) for Q &
+    A.
+  - For other information please contact Sean Turner
+    (<sean.turner@pnnl.gov>)
