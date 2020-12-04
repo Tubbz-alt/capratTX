@@ -26,4 +26,5 @@ Imports:
     tidyr,
     tmaptools,
     viridis,
-    vroom
+    vroom,
+    reservoir
