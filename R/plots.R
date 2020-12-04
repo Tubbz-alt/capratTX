@@ -21,7 +21,7 @@ plot_watershed <- function(reservoir) {
 
 plot_texas_reservoirs <- function(drawdown_scenario){
 
-  system.file("extdata", package = "ECRAT") -> sys_dir
+  system.file("extdata", package = "capratTX") -> sys_dir
 
   vroom_silent(paste0(sys_dir,
                "/ercot_reservoirs_lat_lon.csv")) -> reservoirs

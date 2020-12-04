@@ -7,7 +7,7 @@
 validate_all_reservoirs(res_filepath)
 }
 \arguments{
-\item{res_filepath}{full path to reservoir data file for ERCOT}
+\item{res_filepath}{full path to reservoir records and attributes file ("ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx")}
 }
 \description{
 validate_all_reservoirs

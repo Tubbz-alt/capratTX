@@ -1,6 +1,6 @@
 #' calibrate_all_reservoirs
 #' @details ...
-#' @param res_filepath full path to reservoir data file for ERCOT
+#' @param res_filepath full path to reservoir records and attributes file ("ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx")
 #' @param output return either optimized parameters ("parameters") or simulation results ("results")
 #' @importFrom purrr map_dfr
 #' @importFrom dplyr mutate
@@ -36,7 +36,7 @@ calibrate_all_reservoirs <- function(res_filepath,
 
 #' validate_all_reservoirs
 #' @details perform k-fold validation on all reservoir models
-#' @param res_filepath full path to reservoir data file for ERCOT
+#' @param res_filepath full path to reservoir records and attributes file ("ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx")
 #' @importFrom purrr map_dfr
 #' @importFrom dplyr mutate
 #' @export
@@ -71,7 +71,7 @@ validate_all_reservoirs <- function(res_filepath){
 #' calibrate_reservoir_model
 #' @details Performs calibration of reservoir model using monthly demand factors
 #' @param reservoir_name name of reservoir to be calibrated
-#' @param res_filepath full path to reservoir data file for ERCOT
+#' @param res_filepath full path to reservoir records and attributes file ("ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx")
 #' @param plot T/F plot storage time series?
 #' @param output return either optimized parameters ("parameters") or simulation results ("results")
 #' @param validation_mode logical. Set to TRUE to perform k-fold validation on model and report RMSE scores across validation groups.

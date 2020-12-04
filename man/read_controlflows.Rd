@@ -4,10 +4,12 @@
 \alias{read_controlflows}
 \title{read_controlflows}
 \usage{
-read_controlflows(reservoir)
+read_controlflows(reservoir, data_path)
 }
 \arguments{
-\item{res_filepath}{full path to reservoir data file for ERCOT}
+\item{reservoir}{name of reservoir}
+
+\item{data_path}{path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"}
 }
 \description{
 read_controlflows

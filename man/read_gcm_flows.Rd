@@ -4,14 +4,16 @@
 \alias{read_gcm_flows}
 \title{read_gcm_flows}
 \usage{
-read_gcm_flows(reservoir, gcm, period)
+read_gcm_flows(reservoir, gcm, period, data_path)
 }
 \arguments{
-\item{reservoir}{...}
+\item{reservoir}{name of reservoir}
 
 \item{gcm}{gcm}
 
 \item{period}{"baseline" or "future"}
+
+\item{data_path}{path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"}
 }
 \description{
 read_gcm_flows

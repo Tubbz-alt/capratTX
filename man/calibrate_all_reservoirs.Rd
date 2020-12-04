@@ -7,7 +7,7 @@
 calibrate_all_reservoirs(res_filepath, output = "parameters")
 }
 \arguments{
-\item{res_filepath}{full path to reservoir data file for ERCOT}
+\item{res_filepath}{full path to reservoir records and attributes file ("ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx")}
 
 \item{output}{return either optimized parameters ("parameters") or simulation results ("results")}
 }

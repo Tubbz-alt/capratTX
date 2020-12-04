@@ -35,13 +35,14 @@ read_ERCOT_data <- function(res_filepath) {
 
 #' read_controlflows
 #' @details ...
-#' @param res_filepath full path to reservoir data file for ERCOT
+#' @param reservoir name of reservoir
+#' @param data_path path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"
 #' @importFrom purrr map_dfr
 #' @importFrom vroom vroom cols
 #' @importFrom dplyr select one_of
 #' @export
 #'
-read_controlflows <- function(reservoir){
+read_controlflows <- function(reservoir, data_path){
 
   # replace space with _ for reservoir column names
   gsub(" ", "_", reservoir) -> reservoir_
@@ -49,8 +50,8 @@ read_controlflows <- function(reservoir){
     reservoir_ <- "South_Texas_Project_Reservoir"
   }
 
-  vroom_silent(paste0(system.file("extdata/", package = "ECRAT"),
-                      "/Control/", reservoir_, ".csv")) %>%
+  vroom_silent(paste0("Inflow Scenarios/",
+                      "Control/", reservoir_, ".csv")) %>%
     select(-reservoir) -> controlflows
 
   return(controlflows)
@@ -60,18 +61,19 @@ read_controlflows <- function(reservoir){
 
 #' read_gcm_flows
 #' @details ...
-#' @param reservoir ...
+#' @param reservoir name of reservoir
 #' @param gcm gcm
 #' @param period "baseline" or "future"
+#' @param data_path path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"
 #' @importFrom purrr map_dfr
 #' @importFrom vroom vroom cols
 #' @importFrom dplyr select one_of
 #' @export
 #'
-read_gcm_flows <- function(reservoir, gcm, period){
+read_gcm_flows <- function(reservoir, gcm, period, data_path){
 
   list.files(
-    paste0(system.file("extdata/", package = "ECRAT"), "/gcm"),
+    paste0(data_path, "Inflow Scenarios/GCM"),
     full = T
   ) %>%
     .[grepl(gcm, .)] %>%
@@ -92,11 +94,13 @@ read_gcm_flows <- function(reservoir, gcm, period){
 }
 
 
-
+#' box_cox_transform
+#' @details ...
 box_cox_transform <- function(x, lamda){
   ((1 + x) ^ lamda - 1) / lamda
 }
 
-
+#' vroom_silent
+#' @details ...
 vroom_silent <- function(x) vroom(x, col_types = cols())
 
