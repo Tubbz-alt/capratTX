@@ -7,6 +7,7 @@
 
 [![Travis build
 status](https://travis-ci.com/pnnl/capratTX.svg?branch=master)](https://travis-ci.com/pnnl/capratTX)
+[![DOI](https://zenodo.org/badge/304059832.svg)](https://zenodo.org/badge/latestdoi/304059832)
 <!-- badges: end -->
 
 The goal of `capratTX` is to simulate water storage reservoirs providing
