@@ -23,7 +23,8 @@ cooling water to thermal power plants in the ERCOT.
 ## Data requirements
 
 You must download the [ERCOT Reservoir Watershed Delineations and Inflow
-Scenarios](10.5281/zenodo.4273147) data files to run this software.
+Scenarios](https://zenodo.org/record/4273147#.X8q-Vy9h1TY) data files to
+run this software.
 
 ## Installation
 
