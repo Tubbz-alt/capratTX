@@ -1,15 +1,20 @@
 #' calibrate_all_reservoirs
 #' @details ...
-#' @param res_filepath full path to reservoir records and attributes file ("ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx")
+#' @param data_path path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"
 #' @param output return either optimized parameters ("parameters") or simulation results ("results")
 #' @importFrom purrr map_dfr
 #' @importFrom dplyr mutate
 #' @export
 #'
-calibrate_all_reservoirs <- function(res_filepath,
+calibrate_all_reservoirs <- function(data_path,
                                      output = "parameters"){
 
   stopifnot(output == "results" | output == "parameters")
+
+  paste0(data_path,
+         "/Reservoir records and attributes/",
+         "ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx") ->
+    res_filepath
 
   read_ERCOT_data(res_filepath)[["storage_levels"]] %>%
     .[["Look Up Name for Reservoir"]] %>%
@@ -21,7 +26,7 @@ calibrate_all_reservoirs <- function(res_filepath,
     map_dfr(function(x){
       message(x)
       calibrate_reservoir_model(x,
-                                res_filepath = res_filepath,
+                                data_path = data_path,
                                 plot = FALSE,
                                 output = output) -> result
       if(output == "parameters"){
@@ -36,12 +41,17 @@ calibrate_all_reservoirs <- function(res_filepath,
 
 #' validate_all_reservoirs
 #' @details perform k-fold validation on all reservoir models
-#' @param res_filepath full path to reservoir records and attributes file ("ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx")
+#' @param data_path path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"
 #' @importFrom purrr map_dfr
 #' @importFrom dplyr mutate
 #' @export
 #'
-validate_all_reservoirs <- function(res_filepath){
+validate_all_reservoirs <- function(data_path){
+
+  paste0(data_path,
+         "/Reservoir records and attributes/",
+         "ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx") ->
+    res_filepath
 
   read_ERCOT_data(res_filepath)[["storage_levels"]] %>%
     .[["Look Up Name for Reservoir"]] %>%
@@ -54,7 +64,7 @@ validate_all_reservoirs <- function(res_filepath){
     map(function(x){
       message(x)
       calibrate_reservoir_model(x,
-                                res_filepath = res_filepath,
+                                data_path = data_path,
                                 plot = FALSE,
                                 validation_mode = TRUE) -> trmse_scores
 
@@ -71,7 +81,7 @@ validate_all_reservoirs <- function(res_filepath){
 #' calibrate_reservoir_model
 #' @details Performs calibration of reservoir model using monthly demand factors
 #' @param reservoir_name name of reservoir to be calibrated
-#' @param res_filepath full path to reservoir records and attributes file ("ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx")
+#' @param data_path path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"
 #' @param plot T/F plot storage time series?
 #' @param output return either optimized parameters ("parameters") or simulation results ("results")
 #' @param validation_mode logical. Set to TRUE to perform k-fold validation on model and report RMSE scores across validation groups.
@@ -84,7 +94,7 @@ validate_all_reservoirs <- function(res_filepath){
 #' @export
 #'
 calibrate_reservoir_model <- function(reservoir_name,
-                                      res_filepath,
+                                      data_path,
                                       plot = FALSE,
                                       s_cap_def = "reported",
                                       output = "parameters",
@@ -92,7 +102,14 @@ calibrate_reservoir_model <- function(reservoir_name,
 
   stopifnot(output == "results" | output == "parameters")
 
-  read_controlflows(reservoir_name) -> flows
+  paste0(data_path,
+         "/Reservoir records and attributes/",
+         "ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx") ->
+    res_filepath
+
+  read_controlflows(reservoir_name,
+                    data_path = data_path) ->
+    flows
 
   read_ERCOT_data(res_filepath)[["storage_levels"]] %>%
     filter(`Look Up Name for Reservoir` == reservoir_name) %>%

@@ -1,38 +1,38 @@
 #' simulate_gcm_inflows_all_dams
 #' @details ...
-#' @param res_filepath full path to reservoir data file for ERCOT
+#' @param data_path path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"
 #' @param period either "baseline" or "future"
+#' @params_path path to calibrated reservoir parameters
 #' @importFrom purrr map_dfr
 #' @importFrom vroom vroom cols
 #' @importFrom dplyr mutate group_by summarise
 #' @importFrom lubridate year month
 #' @export
 #'
-simulate_gcm_inflows_all_dams <- function(res_filepath, period){
+simulate_gcm_inflows_all_dams <- function(data_path, period, params_path){
+
+  params <- vroom_silent(params_path)
+
+  paste0(data_path,
+         "/Reservoir records and attributes/",
+         "ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx") ->
+    res_filepath
+
   read_ERCOT_data(res_filepath)[["storage_levels"]] %>%
     .[["Look Up Name for Reservoir"]] %>%
     unique() -> reservoir_shortnames
-
-  vroom("../params.csv", col_types = cols()) -> params
 
   reservoir_shortnames %>%
     .[!grepl("Amistad", .)] %>%
     .[!grepl("STP", .)] %>%
     map_dfr(function(x){
 
-      # calibrate_reservoir_model(x,
-      #                           res_filepath = res_filepath,
-      #                           plot = FALSE,
-      #                           output = "parameters") -> parameters
-
-
-
       read_ERCOT_data(res_filepath)[["reservoir_info"]] %>%
         filter(`Look Up Name for Reservoir` == x) %>%
         .[["Maximum storage level (Acre-ft)"]] * af_to_mcm ->
         storage_capacity_reported
 
-      simulate_gcm_inflows(res_filepath = res_filepath,
+      simulate_gcm_inflows(data_path = data_path,
                            reservoir = x,
                            period = period,
                            parameters = params) %>%
@@ -43,7 +43,7 @@ simulate_gcm_inflows_all_dams <- function(res_filepath, period){
 
 #' simulate_gcm_inflows
 #' @details ...
-#' @param res_filepath full path to reservoir data file for ERCOT
+#' @param data_path path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"
 #' @param reservoir name of the reservoir
 #' @param period either "baseline" or "future"
 #' @param parameters tibble with headers of "target", "hedge", and "reservoir"
@@ -53,7 +53,12 @@ simulate_gcm_inflows_all_dams <- function(res_filepath, period){
 #' @importFrom lubridate year month
 #' @export
 #'
-simulate_gcm_inflows <- function(res_filepath, reservoir, period, parameters, s_initial = 1.0){
+simulate_gcm_inflows <- function(data_path, reservoir, period, parameters, s_initial = 1.0){
+
+  paste0(data_path,
+         "/Reservoir records and attributes/",
+         "ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx") ->
+    res_filepath
 
   parameters %>% filter(reservoir == !! reservoir) -> x
   target <- x$target[1]
@@ -69,7 +74,7 @@ simulate_gcm_inflows <- function(res_filepath, reservoir, period, parameters, s_
     map_dfr(function(gcm){
 
       # read the inflows
-      read_gcm_flows(reservoir, gcm, period) %>%
+      read_gcm_flows(reservoir, gcm, period, data_path) %>%
         mutate(year = year(date), month = month(date)) %>%
         group_by(year, month) %>%
         summarise(cumulative_inflow_mcm = sum(flow)) %>% ungroup() ->
@@ -93,15 +98,16 @@ simulate_gcm_inflows <- function(res_filepath, reservoir, period, parameters, s_
 #' generate_monthly_flow_replicates
 #' @details ...
 #' @param reservoir name of the reservoir
+#' @param data_path path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"
 #' @importFrom purrr map_dfr
 #' @importFrom reservoir dirtyreps
 #' @import dplyr
 #' @importFrom lubridate year month
 #' @export
 #'
-generate_monthly_flow_replicates <- function(reservoir){
+generate_monthly_flow_replicates <- function(reservoir, data_path){
 
-  read_controlflows(reservoir) %>%
+  read_controlflows(reservoir, data_path) %>%
     mutate(year = year(date), month = month(date)) %>%
     group_by(year, month) %>%
     summarise(obs_inflow = sum(flow)) %>% ungroup() %>%

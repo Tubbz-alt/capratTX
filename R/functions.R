@@ -50,7 +50,7 @@ read_controlflows <- function(reservoir, data_path){
     reservoir_ <- "South_Texas_Project_Reservoir"
   }
 
-  vroom_silent(paste0("Inflow Scenarios/",
+  vroom_silent(paste0(data_path, "/Inflow Scenarios/",
                       "Control/", reservoir_, ".csv")) %>%
     select(-reservoir) -> controlflows
 

@@ -6,7 +6,7 @@
 \usage{
 calibrate_reservoir_model(
   reservoir_name,
-  res_filepath,
+  data_path,
   plot = FALSE,
   s_cap_def = "reported",
   output = "parameters",
@@ -16,7 +16,7 @@ calibrate_reservoir_model(
 \arguments{
 \item{reservoir_name}{name of reservoir to be calibrated}
 
-\item{res_filepath}{full path to reservoir records and attributes file ("ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx")}
+\item{data_path}{path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"}
 
 \item{plot}{T/F plot storage time series?}
 

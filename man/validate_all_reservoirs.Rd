@@ -4,10 +4,10 @@
 \alias{validate_all_reservoirs}
 \title{validate_all_reservoirs}
 \usage{
-validate_all_reservoirs(res_filepath)
+validate_all_reservoirs(data_path)
 }
 \arguments{
-\item{res_filepath}{full path to reservoir records and attributes file ("ERCOT_reservoir_attributes_and_records_PUBLIC.xlsx")}
+\item{data_path}{path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"}
 }
 \description{
 validate_all_reservoirs

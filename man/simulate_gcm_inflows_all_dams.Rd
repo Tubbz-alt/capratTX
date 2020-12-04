@@ -4,10 +4,10 @@
 \alias{simulate_gcm_inflows_all_dams}
 \title{simulate_gcm_inflows_all_dams}
 \usage{
-simulate_gcm_inflows_all_dams(res_filepath, period)
+simulate_gcm_inflows_all_dams(data_path, period, params_path)
 }
 \arguments{
-\item{res_filepath}{full path to reservoir data file for ERCOT}
+\item{data_path}{path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"}
 
 \item{period}{either "baseline" or "future"}
 }

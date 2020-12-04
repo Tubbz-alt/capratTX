@@ -4,10 +4,12 @@
 \alias{generate_monthly_flow_replicates}
 \title{generate_monthly_flow_replicates}
 \usage{
-generate_monthly_flow_replicates(reservoir)
+generate_monthly_flow_replicates(reservoir, data_path)
 }
 \arguments{
 \item{reservoir}{name of the reservoir}
+
+\item{data_path}{path to data directory "ERCOT Reservoir Watershed Delineations and Inflow Scenarios"}
 }
 \description{
 generate_monthly_flow_replicates
