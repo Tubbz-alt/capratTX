@@ -20,6 +20,14 @@ knitr::opts_chunk$set(
 
 The goal of `capratTX` is to simulate water storage reservoirs providing cooling water to thermal power plants in the ERCOT.
 
+## Contact
+- Please use [issues](https://github.com/pnnl/capratTX/issues) for Q & A.
+- For other information please contact Sean Turner (sean.turner@pnnl.gov)
+
+## Data requirements
+
+You must download the [ERCOT Reservoir Watershed Delineations and Inflow Scenarios](10.5281/zenodo.4273147) data files to run this software.
+
 ## Installation
 
 You can install the development version of `capratTX` using `devtools`:
@@ -29,9 +37,51 @@ library(devtools)
 install_github("pnnl/capratTX")
 ```
 
-## Contact
-- Please use [issues](https://github.com/pnnl/capratTX/issues) for Q & A.
-- For other information please contact Sean Turner (sean.turner@pnnl.gov)
+## Usage
+Start by loading the library and setting the data path:
+```{r}
+library(capratTX)
+data_path <- "your_directory/ERCOT Reservoir Watershed Delineations and Inflow Scenarios/"
+```
+```{r, show = F}
+data_path <- "../../WECC-ERCOT/ERCOT/data/ERCOT Reservoir Watershed Delineations and Inflow Scenarios/"
+```
+
+Calibrate reservoirs and save a parameter file (calibration may take a minute or two reservoir operating functions are optimized):
+```{r}
+calibrate_all_reservoirs(data_path) -> calibrated_parameters
+head(calibrated_parameters)
+readr::write_csv(calibrated_parameters, "params.csv")
+```
+
+
+To simulate all dams with the calibrated rules under a given period ("baseline" or "future"):
+```{r}
+simulate_gcm_inflows_all_dams(data_path, period = "future",
+                              params_path = "params.csv") -> sim_data
+head(sim_data)
+```
+
+Plot storage projections for a particular reservoir:
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+sim_data %>% 
+  # select reservoir desired
+  filter(reservoir == "Travis") %>% 
+  # get annual minimums
+  group_by(reservoir, gcm, year) %>% 
+  summarise(s_min = min(s_sim)) %>% 
+  ungroup() %>% 
+  ggplot(aes(year, s_min, col = gcm)) +
+  geom_line() +
+  labs(y = "Minimum storage level (MCM)", x = NULL)
+
+```
+
+
 
 
 
